@@ -6981,6 +6981,24 @@ async function onPinKey(k) {
     setTimeout(() => handlePinComplete(), 120);
   }
 }
+
+// Keyboard listener for the PIN screen
+document.addEventListener('keydown', (e) => {
+  const lockActive = document.getElementById('lockScreen') && document.getElementById('lockScreen').classList.contains('active');
+  if (!lockActive) return;
+  // Numeric keys (top row + numpad)
+  if (/^[0-9]$/.test(e.key)) {
+    e.preventDefault();
+    onPinKey(e.key);
+    return;
+  }
+  // Backspace / Delete
+  if (e.key === 'Backspace' || e.key === 'Delete') {
+    e.preventDefault();
+    onPinKey('del');
+    return;
+  }
+});
 async function handlePinComplete() {
   const entered = pinBuffer;
   if (pinMode === 'verify') {
