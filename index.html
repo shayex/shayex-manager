@@ -1930,44 +1930,86 @@
   .morning-skip:hover { color: var(--text-dim); }
   .morning-skip input { margin-right: 6px; vertical-align: middle; }
 
-  /* ============ PRESS KIT ============ */
+  /* ============ PRESS KIT (Dark / Neon design) ============ */
   .presskit-page {
-    background: white; color: #14141d;
-    padding: 32px;
-    font-family: system-ui, -apple-system, sans-serif;
-    max-width: 800px; margin: 0 auto;
-    border-radius: 8px;
+    background: #07070b;
+    color: #f3f3f7;
+    padding: 36px;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    width: 800px;
+    margin: 0 auto;
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
   }
+  .presskit-page::before {
+    content: '';
+    position: absolute;
+    top: -150px; right: -150px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(162,89,255,0.18) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .presskit-page::after {
+    content: '';
+    position: absolute;
+    bottom: -150px; left: -150px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(255,62,165,0.12) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .presskit-page > * { position: relative; z-index: 1; }
+
+  .presskit-watermark {
+    position: absolute;
+    top: 24px; right: 28px;
+    font-size: 10px;
+    color: rgba(255,255,255,0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-weight: 600;
+    z-index: 2;
+  }
+
   .presskit-header {
-    display: flex; gap: 20px; align-items: center;
-    border-bottom: 3px solid #a259ff;
-    padding-bottom: 20px; margin-bottom: 24px;
+    display: flex; gap: 24px; align-items: center;
+    padding-bottom: 24px;
+    margin-bottom: 28px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
   }
   .presskit-avatar {
-    width: 100px; height: 100px; border-radius: 16px;
+    width: 110px; height: 110px;
+    border-radius: 22px;
     background: linear-gradient(135deg, #a259ff, #ff3ea5);
     display: flex; align-items: center; justify-content: center;
-    color: white; font-size: 36px; font-weight: 700;
+    color: white; font-size: 38px; font-weight: 800;
     overflow: hidden;
     flex-shrink: 0;
+    box-shadow: 0 0 32px rgba(162,89,255,0.4), 0 0 64px rgba(255,62,165,0.2);
   }
   .presskit-avatar img { width: 100%; height: 100%; object-fit: cover; }
   .presskit-name {
-    font-size: 32px; font-weight: 800;
-    color: #14141d;
-    margin-bottom: 4px;
+    font-size: 36px; font-weight: 800;
+    background: linear-gradient(90deg, #f3f3f7, #b8b8c8);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 6px;
+    line-height: 1.1;
   }
   .presskit-realname {
-    font-size: 14px; color: #666;
-    margin-bottom: 8px;
+    font-size: 14px;
+    color: #9a9aab;
+    margin-bottom: 12px;
+    font-weight: 500;
   }
   .presskit-tags {
     display: flex; gap: 6px; flex-wrap: wrap;
   }
   .presskit-tag {
-    background: #f0e6ff;
-    color: #7c3aed;
-    padding: 3px 10px;
+    background: rgba(162,89,255,0.15);
+    color: #a259ff;
+    padding: 4px 11px;
+    border: 1px solid rgba(162,89,255,0.3);
     border-radius: 999px;
     font-size: 11px;
     font-weight: 600;
@@ -1975,25 +2017,39 @@
     letter-spacing: 0.05em;
   }
   .presskit-tag.org {
-    background: #e0f7ff;
-    color: #0891b2;
+    background: rgba(34,211,238,0.15);
+    color: #22d3ee;
+    border-color: rgba(34,211,238,0.3);
   }
   .presskit-tag.fa {
-    background: #ffe6e6;
-    color: #dc2626;
+    background: rgba(57,255,132,0.15);
+    color: #39ff84;
+    border-color: rgba(57,255,132,0.3);
   }
   .presskit-section {
-    margin-bottom: 24px;
+    margin-bottom: 28px;
   }
   .presskit-section-title {
     font-size: 11px;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: #999;
+    letter-spacing: 0.12em;
+    color: #5f5f70;
     font-weight: 700;
-    margin-bottom: 10px;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 6px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .presskit-section-title::before {
+    content: '';
+    width: 4px; height: 14px; border-radius: 2px;
+    background: linear-gradient(180deg, #a259ff, #ff3ea5);
+  }
+  .presskit-section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(255,255,255,0.1), transparent);
   }
   .presskit-stats {
     display: grid;
@@ -2001,24 +2057,30 @@
     gap: 10px;
   }
   .presskit-stat {
-    padding: 12px;
-    background: #f8f8fc;
-    border-radius: 10px;
+    padding: 16px 14px;
+    background: linear-gradient(180deg, #14141d, #0d0d14);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
     border-left: 3px solid #a259ff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
   }
+  .presskit-stat:nth-child(2) { border-left-color: #22d3ee; }
+  .presskit-stat:nth-child(3) { border-left-color: #39ff84; }
+  .presskit-stat:nth-child(4) { border-left-color: #ff8a3d; }
   .presskit-stat .lbl {
     font-size: 9px;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: #999;
-    font-weight: 600;
-    margin-bottom: 3px;
+    letter-spacing: 0.1em;
+    color: #5f5f70;
+    font-weight: 700;
+    margin-bottom: 6px;
   }
   .presskit-stat .val {
-    font-size: 18px;
-    font-weight: 700;
-    color: #14141d;
+    font-size: 20px;
+    font-weight: 800;
+    color: #f3f3f7;
     font-variant-numeric: tabular-nums;
+    line-height: 1;
   }
   .presskit-info-grid {
     display: grid;
@@ -2027,61 +2089,87 @@
   }
   .presskit-info-row {
     display: flex; justify-content: space-between;
-    padding: 8px 12px;
-    background: #f8f8fc;
-    border-radius: 6px;
+    padding: 11px 14px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 10px;
     font-size: 13px;
   }
   .presskit-info-row .lbl {
-    color: #999; font-weight: 500;
+    color: #9a9aab; font-weight: 500;
   }
   .presskit-info-row .val {
-    color: #14141d; font-weight: 600;
+    color: #f3f3f7; font-weight: 600;
   }
   .presskit-table {
     width: 100%;
     border-collapse: collapse;
     font-size: 12px;
+    background: rgba(255,255,255,0.02);
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.08);
   }
   .presskit-table th {
     text-align: left;
-    padding: 8px 10px;
-    background: #f8f8fc;
-    color: #666;
+    padding: 10px 14px;
+    background: rgba(162,89,255,0.08);
+    color: #a259ff;
     font-weight: 700;
     font-size: 10px;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    border-bottom: 2px solid #eee;
+    letter-spacing: 0.08em;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
   }
   .presskit-table td {
-    padding: 8px 10px;
-    border-bottom: 1px solid #f0f0f5;
+    padding: 10px 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    color: #f3f3f7;
+  }
+  .presskit-table tr:last-child td {
+    border-bottom: none;
   }
   .presskit-table td.right {
     text-align: right;
     font-variant-numeric: tabular-nums;
-    font-weight: 600;
+    font-weight: 700;
+    color: #39ff84;
+  }
+  .presskit-table td.muted {
+    color: #9a9aab;
   }
   .presskit-socials {
-    display: flex; gap: 16px; flex-wrap: wrap;
-    font-size: 13px;
+    display: flex; gap: 10px; flex-wrap: wrap;
+    font-size: 12px;
   }
   .presskit-social {
-    color: #7c3aed;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    color: #22d3ee;
     text-decoration: none;
     font-weight: 600;
   }
   .presskit-footer {
     text-align: center;
-    color: #999;
+    color: #5f5f70;
     font-size: 10px;
-    border-top: 1px solid #eee;
+    border-top: 1px solid rgba(255,255,255,0.06);
     padding-top: 16px;
-    margin-top: 24px;
+    margin-top: 28px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+  }
+  .presskit-footer span {
+    color: #a259ff;
   }
 
-  /* Print: only the press kit visible */
+  /* Print fallback (still works) */
   @media print {
     .presskit-modal-open .modal-overlay:not(.presskit-print-active) { display: none !important; }
     .presskit-modal-open .modal-overlay.presskit-print-active {
@@ -2265,6 +2353,10 @@
   @keyframes pulse {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.3; }
+  }
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
   }
 
   /* ============ AUTH / LOGIN SCREEN END ============ */
@@ -3237,6 +3329,7 @@
   }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
 
@@ -3851,9 +3944,9 @@
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:4px;"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
         Copier le texte
       </button>
-      <button class="btn btn-primary" onclick="printPressKit()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:4px;"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
-        Imprimer / PDF
+      <button class="btn btn-primary" id="pressKitDownloadBtn" onclick="downloadPressKitImage()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:4px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Télécharger en image
       </button>
     </div>
   </div>
@@ -4322,6 +4415,34 @@ function computeCountdown(endDateStr) {
 function computeContractStatus(p) {
   if (!p) return null;
   if (p.contractIndefinite) {
+    // Calcul de l'ancienneté depuis le début du contrat
+    if (p.contractStart) {
+      const start = new Date(p.contractStart + 'T00:00:00');
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      start.setHours(0, 0, 0, 0);
+      const diffMs = today.getTime() - start.getTime();
+      const totalDays = Math.floor(diffMs / 86400000);
+      if (totalDays < 0) {
+        // Démarre dans le futur
+        return { status: 'indefinite', days: null, text: 'CDI à venir', short: 'CDI' };
+      }
+      const years = Math.floor(totalDays / 365);
+      const months = Math.floor((totalDays % 365) / 30);
+      const days = totalDays - years * 365 - months * 30;
+      const parts = [];
+      if (years > 0) parts.push(years + ' an' + (years > 1 ? 's' : ''));
+      if (months > 0) parts.push(months + ' mois');
+      if (years === 0 && days > 0) parts.push(days + ' jour' + (days > 1 ? 's' : ''));
+      const tenureText = parts.length > 0 ? parts.join(' et ') : 'aujourd\'hui';
+      return {
+        status: 'indefinite',
+        days: totalDays,
+        years, months, daysOnly: days,
+        text: 'CDI · depuis ' + tenureText,
+        short: 'CDI · ' + tenureText
+      };
+    }
     return { status: 'indefinite', days: null, text: 'Contrat à durée indéterminée', short: 'CDI' };
   }
   return computeCountdown(p.contractEnd);
@@ -9724,6 +9845,9 @@ function renderPressKit(p) {
   perfs.forEach(p => { if (p.date) { const ms = new Date(p.date + 'T00:00:00').getTime(); if (ms < earliestMs) earliestMs = ms; } });
   const yearsActive = Math.max(1, Math.round((Date.now() - earliestMs) / (365 * 86400000) * 10) / 10);
 
+  // Contract status
+  const cd = computeContractStatus(p);
+
   // Avatar
   const avatarInner = p.photo
     ? '<img src="' + escapeAttr(p.photo) + '" alt="" />'
@@ -9752,8 +9876,15 @@ function renderPressKit(p) {
   if (p.age) infoRows.push({ lbl: 'Âge', val: p.age + ' ans' });
   if (country) infoRows.push({ lbl: 'Pays', val: country.name });
   if (p.organization) infoRows.push({ lbl: 'Organisation', val: p.organization });
-  if (p.contractIndefinite) infoRows.push({ lbl: 'Contrat', val: 'CDI' });
-  else if (p.contractEnd) infoRows.push({ lbl: 'Fin de contrat', val: formatDate(p.contractEnd) });
+  if (cd) {
+    if (cd.status === 'indefinite') {
+      infoRows.push({ lbl: 'Contrat', val: cd.short });
+    } else if (cd.status === 'expired') {
+      infoRows.push({ lbl: 'Contrat', val: 'Expiré' });
+    } else if (p.contractEnd) {
+      infoRows.push({ lbl: 'Fin de contrat', val: formatDate(p.contractEnd) });
+    }
+  }
   const infoHtml = infoRows.length > 0
     ? '<div class="presskit-info-grid">' +
         infoRows.map(r => '<div class="presskit-info-row"><span class="lbl">' + escapeHtml(r.lbl) + '</span><span class="val">' + escapeHtml(r.val) + '</span></div>').join('') +
@@ -9767,7 +9898,7 @@ function renderPressKit(p) {
       '<tbody>' +
         topPerfs.map(perf =>
           '<tr>' +
-            '<td>' + (perf.date ? formatDateShort(perf.date) : '—') + '</td>' +
+            '<td class="muted">' + (perf.date ? formatDateShort(perf.date) : '—') + '</td>' +
             '<td>' + escapeHtml(perf.cup || '—') + '</td>' +
             '<td>' + escapeHtml(perf.placement || '—') + '</td>' +
             '<td class="right">' + (perf.cash ? fmtMoney(Number(perf.cash)) : '—') + '</td>' +
@@ -9775,19 +9906,31 @@ function renderPressKit(p) {
         ).join('') +
       '</tbody>' +
     '</table>'
-    : '<p style="color:#999;font-size:13px;">Aucune performance enregistrée.</p>';
+    : '<p style="color:#9a9aab;font-size:13px;">Aucune performance enregistrée.</p>';
 
   // Socials
+  const socialIco = {
+    twitter: '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>',
+    twitch: '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg>',
+    tracker: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>',
+  };
   const socials = [];
-  if (p.twitter) socials.push('<a class="presskit-social" href="https://twitter.com/' + escapeAttr(p.twitter.replace('@','')) + '" target="_blank">@' + escapeHtml(p.twitter.replace('@','')) + ' (Twitter/X)</a>');
-  if (p.twitch) socials.push('<a class="presskit-social" href="https://twitch.tv/' + escapeAttr(p.twitch) + '" target="_blank">' + escapeHtml(p.twitch) + ' (Twitch)</a>');
-  if (p.tracker) socials.push('<a class="presskit-social" href="' + escapeAttr(p.tracker) + '" target="_blank">Fortnite Tracker</a>');
+  if (p.twitter) {
+    const handle = p.twitter.replace(/.*twitter\.com\/|.*x\.com\/|^@/, '').replace('/', '');
+    socials.push('<a class="presskit-social" href="https://twitter.com/' + escapeAttr(handle) + '" target="_blank">' + socialIco.twitter + '<span>@' + escapeHtml(handle) + '</span></a>');
+  }
+  if (p.twitch) {
+    const handle = p.twitch.replace(/.*twitch\.tv\//, '').replace('/', '');
+    socials.push('<a class="presskit-social" href="https://twitch.tv/' + escapeAttr(handle) + '" target="_blank">' + socialIco.twitch + '<span>' + escapeHtml(handle) + '</span></a>');
+  }
+  if (p.tracker) socials.push('<a class="presskit-social" href="' + escapeAttr(p.tracker) + '" target="_blank">' + socialIco.tracker + '<span>Fortnite Tracker</span></a>');
   const socialsHtml = socials.length > 0
     ? '<div class="presskit-socials">' + socials.join('') + '</div>'
-    : '<p style="color:#999;font-size:13px;">Aucun lien renseigné.</p>';
+    : '<p style="color:#9a9aab;font-size:13px;">Aucun lien renseigné.</p>';
 
   document.getElementById('pressKitContent').innerHTML =
     '<div class="presskit-page" id="pressKitPage">' +
+      '<div class="presskit-watermark">SHAYEX MANAGER</div>' +
       '<div class="presskit-header">' +
         '<div class="presskit-avatar">' + avatarInner + '</div>' +
         '<div style="flex:1;min-width:0;">' +
@@ -9818,7 +9961,7 @@ function renderPressKit(p) {
       '</div>' +
 
       '<div class="presskit-footer">' +
-        'Document généré le ' + formatDate(todayISO()) + ' · Shayex Manager' +
+        'Document généré le ' + formatDate(todayISO()) + ' · <span>SHAYEX MANAGER</span>' +
       '</div>' +
     '</div>';
 }
@@ -9833,6 +9976,55 @@ function printPressKit() {
       document.getElementById('pressKitModal').classList.remove('presskit-print-active');
     }, 500);
   }, 100);
+}
+
+async function downloadPressKitImage() {
+  const target = document.getElementById('pressKitPage');
+  if (!target) { showToast('Press kit introuvable', 'error'); return; }
+  if (typeof html2canvas === 'undefined') {
+    showToast('Bibliothèque d\'export non chargée. Vérifie ta connexion.', 'error');
+    return;
+  }
+
+  const btn = document.getElementById('pressKitDownloadBtn');
+  const originalContent = btn ? btn.innerHTML : null;
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:4px;animation:spin 0.8s linear infinite;"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>Génération...';
+  }
+
+  try {
+    // Render at higher pixel ratio for crisp images
+    const canvas = await html2canvas(target, {
+      backgroundColor: '#07070b',
+      scale: 2,
+      useCORS: true,
+      logging: false,
+      imageTimeout: 15000,
+    });
+
+    const dataUrl = canvas.toDataURL('image/png');
+    const p = players.find(x => x.id === _pressKitPlayerId);
+    const safeName = p ? p.pseudo.replace(/[^a-zA-Z0-9_-]/g, '_') : 'player';
+    const stamp = new Date().toISOString().slice(0, 10);
+
+    const a = document.createElement('a');
+    a.href = dataUrl;
+    a.download = 'press-kit-' + safeName + '-' + stamp + '.png';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+
+    showToast('Press kit téléchargé', 'success');
+  } catch (err) {
+    console.error('Erreur export press kit', err);
+    showToast('Erreur génération image : ' + (err.message || 'inconnu'), 'error');
+  } finally {
+    if (btn && originalContent) {
+      btn.disabled = false;
+      btn.innerHTML = originalContent;
+    }
+  }
 }
 
 async function copyPressKitText() {
