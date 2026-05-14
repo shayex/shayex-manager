@@ -2169,6 +2169,40 @@
     color: #a259ff;
   }
 
+  /* Press kit mode toggle (inside modal actions area) */
+  .presskit-mode-toggle {
+    display: inline-flex;
+    gap: 2px;
+    padding: 3px;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-right: auto;
+  }
+  .presskit-mode-toggle button {
+    background: transparent;
+    border: none;
+    color: var(--text-dim);
+    padding: 7px 14px;
+    border-radius: 7px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .presskit-mode-toggle button:hover {
+    color: var(--text);
+  }
+  .presskit-mode-toggle button.active {
+    background: linear-gradient(135deg, var(--neon-purple), var(--neon-pink));
+    color: #fff;
+    box-shadow: 0 0 10px rgba(162,89,255,0.3);
+  }
+
   /* Print fallback (still works) */
   @media print {
     .presskit-modal-open .modal-overlay:not(.presskit-print-active) { display: none !important; }
@@ -3939,6 +3973,16 @@
     </button>
     <div id="pressKitContent"></div>
     <div class="modal-actions">
+      <div class="presskit-mode-toggle" role="group" aria-label="Mode d'affichage">
+        <button id="pkModeRecent" onclick="setPressKitMode('recent')">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Récentes
+        </button>
+        <button id="pkModeBest" onclick="setPressKitMode('best')">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+          Meilleures
+        </button>
+      </div>
       <button class="btn btn-ghost" onclick="closePressKitModal()">Fermer</button>
       <button class="btn btn-ghost" onclick="copyPressKitText()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:4px;"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
@@ -9813,11 +9857,13 @@ async function toggleMorningBriefing(disabled) {
    PRESS KIT GENERATOR
    ============================================================ */
 let _pressKitPlayerId = null;
+let _pressKitMode = 'recent'; // 'recent' | 'best'
 
 function openPressKitModal(playerId) {
   const p = players.find(x => x.id === playerId);
   if (!p) return;
   _pressKitPlayerId = playerId;
+  _pressKitMode = 'recent';
   renderPressKit(p);
   document.getElementById('pressKitModal').classList.add('active');
 }
@@ -9827,6 +9873,12 @@ function closePressKitModal() {
   _pressKitPlayerId = null;
 }
 
+function setPressKitMode(mode) {
+  _pressKitMode = mode;
+  const p = players.find(x => x.id === _pressKitPlayerId);
+  if (p) renderPressKit(p);
+}
+
 function renderPressKit(p) {
   const country = getCountry(p.country);
   // Latest PR
@@ -9834,11 +9886,34 @@ function renderPressKit(p) {
   const latestPR = ranks.length > 0 ? ranks[ranks.length - 1].value : null;
   // Total cash
   const totalCash = (p.performances || []).reduce((s, x) => s + (Number(x.cash) || 0), 0);
-  // Top placements
-  const perfs = (p.performances || []).slice().sort((a, b) => (b.date || '').localeCompare(a.date || ''));
-  const topPerfs = perfs.slice(0, 8);
   // Cup count
-  const cupCount = perfs.length;
+  const cupCount = (p.performances || []).length;
+
+  // Sort perfs based on mode
+  let perfs;
+  if (_pressKitMode === 'best') {
+    // Tri par "meilleur résultat" : meilleur classement d'abord, puis cash élevé d'abord
+    perfs = (p.performances || []).slice().sort((a, b) => {
+      const placeA = parseInt(a.placement, 10);
+      const placeB = parseInt(b.placement, 10);
+      // Placements numériques d'abord, puis non numériques
+      const aIsNum = !isNaN(placeA);
+      const bIsNum = !isNaN(placeB);
+      if (aIsNum && bIsNum) {
+        if (placeA !== placeB) return placeA - placeB; // plus petit = meilleur
+        return (Number(b.cash) || 0) - (Number(a.cash) || 0);
+      }
+      if (aIsNum && !bIsNum) return -1;
+      if (!aIsNum && bIsNum) return 1;
+      // Si ni l'un ni l'autre n'a de classement numérique, trier par cash décroissant
+      return (Number(b.cash) || 0) - (Number(a.cash) || 0);
+    });
+  } else {
+    // Mode 'recent' : tri par date décroissante (comportement par défaut)
+    perfs = (p.performances || []).slice().sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+  }
+  const topPerfs = perfs.slice(0, 8);
+
   // Years active (from earliest ranking or perf date)
   let earliestMs = p.createdAt || Date.now();
   ranks.forEach(r => { if (r.date) { const ms = new Date(r.date + 'T00:00:00').getTime(); if (ms < earliestMs) earliestMs = ms; } });
@@ -9951,7 +10026,7 @@ function renderPressKit(p) {
       '</div>' : '') +
 
       '<div class="presskit-section">' +
-        '<div class="presskit-section-title">Palmarès récent</div>' +
+        '<div class="presskit-section-title">' + (_pressKitMode === 'best' ? 'Meilleurs résultats' : 'Palmarès récent') + '</div>' +
         perfsHtml +
       '</div>' +
 
@@ -9964,6 +10039,12 @@ function renderPressKit(p) {
         'Document généré le ' + formatDate(todayISO()) + ' · <span>SHAYEX MANAGER</span>' +
       '</div>' +
     '</div>';
+
+  // Update toggle buttons active state
+  const recentBtn = document.getElementById('pkModeRecent');
+  const bestBtn = document.getElementById('pkModeBest');
+  if (recentBtn) recentBtn.classList.toggle('active', _pressKitMode === 'recent');
+  if (bestBtn) bestBtn.classList.toggle('active', _pressKitMode === 'best');
 }
 
 function printPressKit() {
@@ -10034,8 +10115,28 @@ async function copyPressKitText() {
   const ranks = (p.rankings || []).slice().sort((a, b) => (a.date || '').localeCompare(b.date || ''));
   const latestPR = ranks.length > 0 ? ranks[ranks.length - 1].value : null;
   const totalCash = (p.performances || []).reduce((s, x) => s + (Number(x.cash) || 0), 0);
-  const perfs = (p.performances || []).slice().sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+
+  // Sort perfs based on current mode
+  let perfs;
+  if (_pressKitMode === 'best') {
+    perfs = (p.performances || []).slice().sort((a, b) => {
+      const placeA = parseInt(a.placement, 10);
+      const placeB = parseInt(b.placement, 10);
+      const aIsNum = !isNaN(placeA);
+      const bIsNum = !isNaN(placeB);
+      if (aIsNum && bIsNum) {
+        if (placeA !== placeB) return placeA - placeB;
+        return (Number(b.cash) || 0) - (Number(a.cash) || 0);
+      }
+      if (aIsNum && !bIsNum) return -1;
+      if (!aIsNum && bIsNum) return 1;
+      return (Number(b.cash) || 0) - (Number(a.cash) || 0);
+    });
+  } else {
+    perfs = (p.performances || []).slice().sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+  }
   const topPerfs = perfs.slice(0, 5);
+  const sectionTitle = _pressKitMode === 'best' ? 'MEILLEURS RÉSULTATS' : 'PALMARÈS RÉCENT';
 
   let txt = '═══ ' + p.pseudo.toUpperCase() + ' ═══\n';
   if (p.realName) txt += p.realName + '\n';
@@ -10045,10 +10146,10 @@ async function copyPressKitText() {
   txt += 'STATISTIQUES\n';
   txt += '• Power Ranking : ' + (latestPR != null ? formatPoints(latestPR) : 'non renseigné') + '\n';
   txt += '• Gains totaux : ' + fmtMoney(totalCash) + '\n';
-  txt += '• Cups jouées : ' + perfs.length + '\n\n';
+  txt += '• Cups jouées : ' + (p.performances || []).length + '\n\n';
 
   if (topPerfs.length > 0) {
-    txt += 'PALMARÈS RÉCENT\n';
+    txt += sectionTitle + '\n';
     topPerfs.forEach(perf => {
       txt += '• ' + (perf.date ? formatDateShort(perf.date) + ' · ' : '') + (perf.cup || '') + (perf.placement ? ' · ' + perf.placement : '') + (perf.cash ? ' · ' + fmtMoney(Number(perf.cash)) : '') + '\n';
     });
